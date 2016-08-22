@@ -29,23 +29,30 @@ public class OrderController {
     private IOrderService orderService;
 
     @RequestMapping(value = "/order", method= RequestMethod.GET)
-    public ModelAndView order(@RequestParam(value ="pageNO") int pageNO,@RequestParam(value ="pageSize") int pageSize,@RequestParam(value = "startTime",required=false) String startTime,@RequestParam(value = "endTime",required=false) String endTime,@RequestParam(value = "walletType",required=false) String walletType,@RequestParam(value = "orderId",required=false) String orderId){
+    public ModelAndView order(@RequestParam(value ="pageNO") int pageNO,@RequestParam(value ="pageSize") int pageSize,@RequestParam(value = "startTime",required=false) String startTime,@RequestParam(value = "endTime",required=false) String endTime,@RequestParam(value = "walletType",required=false) String walletType,@RequestParam(value = "action",required=false) String action,@RequestParam(value = "orderId",required=false) String orderId){
         logger.info("Loading Order. Data: pageNO="+pageNO);
         ModelAndView result = new ModelAndView(USER);
 
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long sT=0;
-        long eT = System.currentTimeMillis();
+        long eT = System.currentTimeMillis()/1000;
         try {
             sT = sdf.parse(startTime + " 00:00:00").getTime()/1000;
-            eT = sdf.parse(endTime + " 23:59:59").getTime()/1000;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            eT = (sdf.parse(endTime + " 23:59:59").getTime())/1000;
         } catch (Exception e) {
             e.printStackTrace();
         }
         result.addObject("startTime",startTime);
         result.addObject("endTime",endTime);
         result.addObject("walletType",walletType);
-
+        result.addObject("action",action);
 
         if(orderId!=null&&!orderId.trim().equals("")){
             result.addObject("orderId", orderId);
@@ -53,7 +60,8 @@ public class OrderController {
             page.setList(orderService.getByOrderId(orderId));
             result.addObject("page", page);
         }else {
-            result.addObject("page", orderService.getAllOrder(walletType,sT,eT,pageNO,pageSize));
+            Page<Order> rs = orderService.getAllOrder(action,walletType,sT,eT,pageNO,pageSize);
+            result.addObject("page", rs);
         }
 
         return result;

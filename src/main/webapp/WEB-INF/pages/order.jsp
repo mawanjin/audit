@@ -31,6 +31,24 @@
 <input id="pageNO" name="pageNO" type="hidden" value="${page.pageNO}">
 
     <div style="margin: 20px;">
+    action:
+        <select name="action" onchange="resumePageNO()">
+            <option value="-" <c:if test="${action eq '-'}">selected</c:if>>全部</option>
+            <option value="" <c:if test="${action eq ''}">selected</c:if>></option>
+            <option value="null" <c:if test="${action eq 'null'}">selected</c:if>>null</option>
+            <option value="0" <c:if test="${action eq '0'}">selected</c:if>>0</option>
+            <option value="2" <c:if test="${action eq '2'}">selected</c:if>>2</option>
+            <option value="alipaymobile" <c:if test="${action eq 'alipaymobile'}">selected</c:if>>alipaymobile</option>
+            <option value="heepaymobile" <c:if test="${action eq 'heepaymobile'}">selected</c:if>>heepaymobile</option>
+            <option value="mo9mobile" <c:if test="${action eq 'mo9mobile'}">selected</c:if>>mo9mobile</option>
+            <option value="oneninemobilepay" <c:if test="${action eq 'oneninemobilepay'}">selected</c:if>>oneninemobilepay</option>
+            <option value="papawallet" <c:if test="${action eq 'papawallet'}">selected</c:if>>papawallet</option>
+            <option value="upmpmobilekongjian" <c:if test="${action eq 'upmpmobilekongjian'}">selected</c:if>>upmpmobilekongjian</option>
+            <option value="upmpmobilekongjian1" <c:if test="${action eq 'upmpmobilekongjian1'}">selected</c:if>>upmpmobilekongjian1</option>
+            <option value="weixinmobile" <c:if test="${action eq 'weixinmobile'}">selected</c:if>>weixinmobile</option>
+        </select>
+
+        walletType:
         <select name="walletType" onchange="resumePageNO()">
             <option value="-" <c:if test="${walletType eq '-'}">selected</c:if>>全部</option>
             <option value="null" <c:if test="${walletType eq 'null'}">selected</c:if>>null</option>

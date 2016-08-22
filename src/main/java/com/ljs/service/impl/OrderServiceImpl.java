@@ -28,8 +28,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Page<Order> getAllOrder(String walletType, long startTime, long endTime, int pageNo, int pageCount) {
-        return dao.getAllOrderByPagination(walletType,startTime,endTime,pageNo,pageCount);
+    public Page<Order> getAllOrder(String action, String walletType, long startTime, long endTime, int pageNo, int pageCount) {
+        return dao.getAllOrderByPagination(action,walletType,startTime,endTime,pageNo,pageCount);
     }
 
     @Override

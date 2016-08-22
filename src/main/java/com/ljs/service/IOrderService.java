@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface IOrderService {
     public Page<Order> getAllOrder(int pageNo, int pageCount);
-    public Page<Order> getAllOrder(String walletType,long startTime,long endTime,int pageNo, int pageCount);
+    public Page<Order> getAllOrder(String action,String walletType,long startTime,long endTime,int pageNo, int pageCount);
     public List<Order> getByOrderId(String orderId);
 }

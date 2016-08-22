@@ -55,9 +55,17 @@ public class OrderDAOImpl implements IOrderDAO {
     }
 
     @Override
-    public Page<Order> getAllOrderByPagination(String walletType, long startTime, long endTime, int pageNo, int pageSize) {
-        String param_walletType = "";
-        if(walletType.equals("-")){
+    public Page<Order> getAllOrderByPagination(String action,String walletType, long startTime, long endTime, int pageNo, int pageSize) {
+
+        if(action==null||action.equals("-")){
+            action = "";
+        }else if(action.equals("null")){
+            action = "and action is null ";
+        }else{
+            action = "and action = '"+action+"'";
+        }
+
+        if(walletType==null||walletType.equals("-")){
             walletType = "";
         }else if(walletType.equals("null")){
             walletType = "and walletType is null ";
@@ -66,12 +74,13 @@ public class OrderDAOImpl implements IOrderDAO {
         }
 
         Page<Order> page = new Page<>();
-        page.setList(hibernateUtil.getListForPage("from Order where orderStatus = 1  "+walletType+" and time between "+startTime + " and "+endTime,pageNo,pageSize));
+        int offset = (pageNo-1)*pageSize;
+        page.setList(hibernateUtil.getListForPage("from Order where orderStatus = 1  "+action+" "+walletType+" and time between "+startTime + " and "+endTime,offset,pageSize));
         page.setPageNO(pageNo);
         page.setPageSize(pageSize);
 
         //总条数
-        List sumList = hibernateUtil.getHibernateTemplate().find("select count(*) from Order where orderStatus =1 " + walletType+" and time between "+startTime + " and "+endTime);
+        List sumList = hibernateUtil.getHibernateTemplate().find("select count(*) from Order where orderStatus =1 " +action+" "+ walletType+" and time between "+startTime + " and "+endTime);
         page.setTotalCount(sumList==null?0: (Long) sumList.get(0));
 
         return page;
