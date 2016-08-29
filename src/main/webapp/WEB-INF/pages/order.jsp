@@ -5,7 +5,15 @@
 
 <head>
     <title>order list</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <script src="resources/js/jquery-3.1.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
 <script>
+
+    $(document).ready(function() {
+        $(".js-example-basic-single").select2();
+    });
 
     function pre(){
         document.getElementById('pageNO').value = parseInt(document.getElementById('pageNO').value)-1;
@@ -31,6 +39,17 @@
 <input id="pageNO" name="pageNO" type="hidden" value="${page.pageNO}">
 
     <div style="margin: 20px;">
+
+
+    游戏:
+
+        <select name="appkey" onchange="resumePageNO()" class="js-example-basic-single">
+            <option value="-" <c:if test="${appkey eq '-'}">selected</c:if>>全部</option>
+            <c:forEach items="${appinfo}" var="app">
+                <option value="${app.appKey}" <c:if test="${appkey eq app.appKey}">selected</c:if>>${app.appName}</option>
+            </c:forEach>
+        </select>
+
     action:
         <select name="action" onchange="resumePageNO()">
             <option value="-" <c:if test="${action eq '-'}">selected</c:if>>全部</option>
@@ -62,6 +81,8 @@
         开始日期: <input type="date" name="startTime" value="${startTime}" onchange="resumePageNO()" />  结束日期: <input type="date" name="endTime" value="${endTime}" onchange="resumePageNO()" />
 
         &nbsp;&nbsp;&nbsp;&nbsp;订单号:<input type="text" placeholder="请输入要查询的订单号" name="orderId" value="${orderId}" >
+
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="提交" />
     </div>
 
 <table border="1" cellpadding="0" cellspacing="0">
@@ -78,6 +99,7 @@
         <th>金额</th>
         <th>action</th>
         <th>walletType</th>
+        <th>混合支付中-代金券额</th>
     </tr>
 
     <c:forEach items="${page.list}" var="order">
@@ -135,6 +157,7 @@
         <td>${order.payAmount}</td>
         <td>${order.action}</td>
         <td>${order.walletType}</td>
+        <td>${order._coupon}</td>
         </tr>
     </c:forEach>
 </table>
@@ -153,12 +176,13 @@
             <c:otherwise>下一页</c:otherwise>
         </c:choose>
 
-
-
         每页<input name="pageSize" type="text" value="${page.pageSize}" onchange="resumePageNO()" /> 条 共${page.totalPage}页
     </div>
 
-    <input type="submit" value="提交" />
+    <div>
+        总金额:${page.totalAmount}  &nbsp;混合中代金券占比金额(当前条目数中的):${page.totalCouponAmount}
+    </div>
+
 </form>
 </body>
 </html>

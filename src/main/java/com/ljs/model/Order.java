@@ -15,6 +15,12 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "app_key")
+    private String appKey;
+
+    @Column(name = "app_name")
+    private String appName;
+
     @Column(name = "product_id")
     private String productId;
 
@@ -53,6 +59,12 @@ public class Order implements Serializable {
 
     @Column(name = "wallet_type")
     private String walletType;
+
+
+    @Transient
+    /**混合支付中的代金券金额*/
+    private String _coupon;
+
 
     public long getId() {
         return id;
@@ -164,6 +176,30 @@ public class Order implements Serializable {
 
     public void setWalletType(String walletType) {
         this.walletType = walletType;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String get_coupon() {
+        return _coupon;
+    }
+
+    public void set_coupon(String _coupon) {
+        this._coupon = _coupon;
     }
 
     @Override

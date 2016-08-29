@@ -64,6 +64,11 @@ public class HibernateUtil{
     }
 
 
+    public <T> List fetchAllByHQL(String query) {
+        return sessionFactory.getCurrentSession().createQuery(query).list();
+    }
+
+
 
     @SuppressWarnings("unchecked")
     public <T> T fetchById(Serializable id, Class<T> entityClass) {
@@ -105,5 +110,14 @@ public class HibernateUtil{
         List<?> list = q.list();
         Logger.getGlobal().info("取到的每页的size"+list.size());
         return list;
+    }
+
+    public void executeUpdate(String hql){
+        getHibernateTemplate().execute(new HibernateCallback<Integer>() {
+            @Override
+            public Integer doInHibernate(Session session) throws HibernateException {
+                return session.createQuery(hql).executeUpdate();
+            }
+        });
     }
 }

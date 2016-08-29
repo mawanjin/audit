@@ -18,6 +18,10 @@ public class Page<T> {
     boolean hasNxt;
     boolean hasPre;
 
+    String totalAmount;
+
+    String totalCouponAmount="0";
+
     List<T> list;
 
     public long getPageNO() {
@@ -77,5 +81,21 @@ public class Page<T> {
 
     public void setHasPre(boolean hasPre) {
         this.hasPre = hasPre;
+    }
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getTotalCouponAmount() {
+        return totalCouponAmount;
+    }
+
+    public void setTotalCouponAmount(String totalCouponAmount) {
+        this.totalCouponAmount = totalCouponAmount;
     }
 }

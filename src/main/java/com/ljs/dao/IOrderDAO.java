@@ -13,7 +13,9 @@ import java.util.List;
 public interface IOrderDAO {
 
     public Page<Order> getAllOrderByPagination(int pageNo, int pageSize);
-    public Page<Order> getAllOrderByPagination(String action,String walletType, long startTime, long endTime,int pageNo, int pageSize);
-
+    public Page<Order> getAllOrderByPagination(String appKey, String action, String walletType, long startTime, long endTime, int pageNo, int pageSize);
     public List<Order> getByOrderId(String orderId);
+    public void updateByOrderId(String orderId, String walletType);
+
+    List<String> getAllAppKey();
 }

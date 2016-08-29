@@ -54,15 +54,23 @@ public class OrderDAOImpl implements IOrderDAO {
         return page;
     }
 
+
     @Override
-    public Page<Order> getAllOrderByPagination(String action,String walletType, long startTime, long endTime, int pageNo, int pageSize) {
+    public Page<Order> getAllOrderByPagination(String appKey, String action,String walletType, long startTime, long endTime, int pageNo, int pageSize) {
+
+        if(appKey==null||appKey.equals("-")){
+            appKey = "";
+        }else{
+            appKey = "and appKey = '"+appKey+"' ";
+        }
+
 
         if(action==null||action.equals("-")){
             action = "";
         }else if(action.equals("null")){
             action = "and action is null ";
         }else{
-            action = "and action = '"+action+"'";
+            action = "and action = '"+action+"' ";
         }
 
         if(walletType==null||walletType.equals("-")){
@@ -75,13 +83,19 @@ public class OrderDAOImpl implements IOrderDAO {
 
         Page<Order> page = new Page<>();
         int offset = (pageNo-1)*pageSize;
-        page.setList(hibernateUtil.getListForPage("from Order where orderStatus = 1  "+action+" "+walletType+" and time between "+startTime + " and "+endTime,offset,pageSize));
+        page.setList(hibernateUtil.getListForPage("from Order where orderStatus = 1  "+appKey+action+" "+walletType+" and time between "+startTime + " and "+endTime,offset,pageSize));
         page.setPageNO(pageNo);
         page.setPageSize(pageSize);
 
         //总条数
-        List sumList = hibernateUtil.getHibernateTemplate().find("select count(*) from Order where orderStatus =1 " +action+" "+ walletType+" and time between "+startTime + " and "+endTime);
+        List sumList = hibernateUtil.getHibernateTemplate().find("select count(*) from Order where orderStatus =1 " +appKey+action+" "+ walletType+" and time between "+startTime + " and "+endTime);
         page.setTotalCount(sumList==null?0: (Long) sumList.get(0));
+
+
+
+        //总金额
+        List payList = hibernateUtil.getHibernateTemplate().find("select sum(payAmount) from Order where orderStatus =1 " +appKey+action+" "+ walletType+" and time between "+startTime + " and "+endTime);
+        page.setTotalAmount(payList==null?"0":payList.get(0)+"");
 
         return page;
     }
@@ -89,6 +103,16 @@ public class OrderDAOImpl implements IOrderDAO {
     @Override
     public List<Order> getByOrderId(String orderId) {
         return (List<Order>) hibernateUtil.getHibernateTemplate().find("from Order where orderId = '"+orderId+"'");
+    }
+
+    @Override
+    public void updateByOrderId(String orderId,String walletType) {
+        hibernateUtil.executeUpdate("update Order set walletType ='"+walletType+"'  where orderId = '"+orderId+"'");
+    }
+
+    @Override
+    public List<String> getAllAppKey() {
+        return hibernateUtil.fetchAllByHQL("select appKey from Order where orderStatus =1 group by appKey");
     }
 
 }
